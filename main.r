@@ -1,5 +1,5 @@
 
-# require("deSolve")
+require("deSolve")
 
 f = function(r, x) {
   return(  r[1] - r[2]*x - exp(-1*x)  )
@@ -32,4 +32,7 @@ plot.phase <- function(f, range.main, ranges, fragments=1000, no.runs=100, ylim=
   # dev.new()
 }
 
-plot.phase(f, c(-10, 10), ranges=data.frame(low=c(-10, -10), high=c(10, 10)), no.runs=1000)
+plot.bifurcation = function() {
+}
+
+plot.phase(f, c(-20, 20), ranges=data.frame(low=c(-10, -10), high=c(10, 10)), no.runs=1000)
