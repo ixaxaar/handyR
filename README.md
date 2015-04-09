@@ -1,2 +1,4 @@
-# rdynamics
-Some R scripts for visualizing dynamic systems
+# Handy R scripts
+
+For quick n easy stuff
+
