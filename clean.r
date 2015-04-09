@@ -1,10 +1,8 @@
 
 # Identify the dataset
-dsname <- "weatherAUS"
-ds <- tbl_df(get(dsname))
-names(ds) <- normVarNames(names(ds))
+names(dat) <- normVarNames(names(dat))
 # Lower case variable names.
-vars <- names(ds)
+vars <- names(dat)
 target <- "rain_tomorrow"
 risk <- "risk_mm"
 id <- c("date", "location")
@@ -13,8 +11,8 @@ id <- c("date", "location")
 ignore <- c(id, if (exists("risk")) risk)
 
 # Ignore variables which are completely missing.
-mvc <- sapply(ds[vars], function(x) sum(is.na(x)))
-mvn <- names(which(mvc == nrow(ds)))
+mvc <- sapply(dat[vars], function(x) sum(is.na(x)))
+mvn <- names(which(mvc == nrow(dat)))
 ignore <- union(ignore, mvn)
 
 # Initialise the variables
@@ -22,28 +20,28 @@ vars <- setdiff(vars, ignore)
 
 # Variable roles.
 inputs <- setdiff(vars, target)
-numi <- which(sapply(ds[inputs], is.numeric))
+numi <- which(sapply(dat[inputs], is.numeric))
 numc <- names(numi)
-cati <- which(sapply(ds[inputs], is.factor))
+cati <- which(sapply(dat[inputs], is.factor))
 catc <- names(cati)
 
 # Remove all observations with a missing target.
-ds <- ds[!is.na(ds[target]),]
+dat <- dat[!is.na(dat[target]),]
 
 # Impute missing values needed for randomForest().
-if (sum(is.na(ds[vars]))) ds[vars] <- na.roughfix(ds[vars])
+if (sum(is.na(dat[vars]))) dat[vars] <- na.roughfix(dat[vars])
 
 # Ensure the target is categoric.
-ds[target] <- as.factor(ds[[target]])
+dat[target] <- as.factor(dat[[target]])
 
 # Number of observations.
-nobs <- nrow(ds)
+nobs <- nrow(dat)
 
 # Prepare for model building.
 form <- formula(paste(target, "~ ."))
 seed <- 328058
 train <- sample(nobs, 0.7*nobs)
 test <- setdiff(seq_len(nobs), train)
-actual <- ds[test, target]
-risks <- ds[test, risk]
+actual <- dat[test, target]
+risks <- dat[test, risk]
 
