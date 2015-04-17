@@ -28,3 +28,12 @@ library(wsrf)
 model <- m.wsrf <- wsrf(form, ds[train, vars], ntree=10)
 cl.wsrf <- predict(model, ds[test, vars], type="class")
 pr.wsrf <- predict(model, ds[test, vars], type="prob")[,2]
+
+# Linear Regression
+model = lm(Predictor ~ ., data=dat)
+summary(model)
+pred = predict(model, dat)
+require(caret)
+defaultSummary(data.frame(obs=dat, pred=pred))
+
+
