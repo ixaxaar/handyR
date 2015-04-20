@@ -26,6 +26,36 @@ RMSE(predicted, observed)
 cor(predicted, observed)
 cor(predicted, observed, method = "spearman")
 
+# Plot predictions and residuals
+df = data.frame(Training=dat, Predicted=predict(trained))
+ggplot(data=df, aes(Training ~ Predicted)) + geom_point()
+df1 = data.frame(Training=resid(model), Predicted=predict(trained))
+ggplot(data=df1, aes(Residual, Predicted)) + geom_point()
+
+# Labelled resudials
+plot(model, which=1)
+
+# Scale-location plot
+plot(model, which=3)
+
+# Cooks distance
+plot(model, which=5)
+
+# Confidence intervals
+confint(model)
+
+# Influence and outlier detection
+influence(model)
+
+# Covariances of residuals
+covariances = sapply(c("pred1", "pred2"), function(o) { return(cov(model$residuals, dat[o])) })
+
+# RMSE of residuals
+sqrt(sum(model$residuals^2)/(nrow(dat)-num_predictors)) == model$sigma == sqrt(deviance(model)/(nrow(dat)-num_predictors))
+
+# R squared - variation explained by model
+summary(model)$r.squared
+
 roc_curve <- function(pr.m)
 {
   pr <- prediction(pr.m, actual)
