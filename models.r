@@ -11,9 +11,19 @@ model = m.rp = rpart(form, ds[train, vars])
 cl.rp = predict(model, ds[test, vars], type="class")
 pr.rp = predict(model, ds[test, vars], type="prob")[,2]
 
+# Regression tree
+library(tree)
+model = m.rt = rpart(form, ds[train, vars])
+cl.rt = predict(model, ds[test, vars], type="class")
+pr.rt = predict(model, ds[test, vars], type="prob")[,2]
+
 # Random forest
 library(randomForest)
 model = m.rf = randomForest(form, ds[train, vars], ntree=100)
+cl.rf = predict(model, ds[test, vars], type="class")
+pr.rf = predict(model, ds[test, vars], type="prob")[,2]
+library(party)
+model = m.rf = cforest(form, ds[train, vars], ntree=100)
 cl.rf = predict(model, ds[test, vars], type="class")
 pr.rf = predict(model, ds[test, vars], type="prob")[,2]
 
