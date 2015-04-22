@@ -77,3 +77,32 @@ varImp(trained)
 # Logistic
 model = glm(formula, data=dat, family="binomial")
 
+# Time series
+decomposed = decompose(dat)
+plot(decomposed)
+
+# ARIMA
+acf(dat)
+pacf(dat)
+model = arima(dat, order=c(1,0,0))
+predicted = predict(model, n.ahead=100)
+plot(dat)
+lines(predicted$pred, col="blue")
+lines(predicted$pred-predicted$se, col="red")
+lines(predicted$pred+predicted$se, col="red")
+
+# Survival
+# Kaplan-Meier
+model = survfit(Surv(dat$time, dat$event) ~ group)
+# Nelson-Aalen
+model = survfit(coxph(dat$time, dat$event) ~ group, type="aalen")
+# Cox
+model = coxph(Surv(time, event) ~ groups, method="breslow")
+# Parametric models
+model = survreg(Surv(time, event) ~ groups, dist="exponential")
+model = survreg(Surv(time, event) ~ groups, dist="weibull")
+model = survreg(Surv(time, event) ~ groups, dist="loglogistic")
+
+hazard = -log(model$surv)
+plot(model)
+summary(model)

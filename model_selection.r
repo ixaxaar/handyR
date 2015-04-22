@@ -73,3 +73,8 @@ roc_curve <- function(pr.m)
   return(p)
 }
 
+# Dicky-Fuller test on stationarity
+require(tseries)
+adf.test(dat, alternative="stationary", k=0)
+adf.test(dat, alternative="explosive", k=0)
+
