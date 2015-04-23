@@ -78,3 +78,9 @@ require(tseries)
 adf.test(dat, alternative="stationary", k=0)
 adf.test(dat, alternative="explosive", k=0)
 
+# GLS
+require(nlme)
+plot(ACF(model, form=~var), alpha=0.05)
+model1 = update(model, correlation=corAR1())
+require(MuMIn)
+AICc(model, model1)

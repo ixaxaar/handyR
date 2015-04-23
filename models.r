@@ -78,6 +78,14 @@ varImp(trained)
 # Logistic
 model = glm(formula, data=dat, family="binomial")
 
+# Generalized linear models
+model = glm(formula, data=dat, family="poisson")
+plot(model)
+require(nlme)
+# gls - account for temporal autocorrelation
+model = gls(formula, data=dat, family="poisson")
+plot(model)
+
 # Time series
 decomposed = decompose(dat)
 plot(decomposed)
