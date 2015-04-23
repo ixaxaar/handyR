@@ -10,6 +10,7 @@ library(rpart)
 model = m.rp = rpart(form, ds[train, vars])
 cl.rp = predict(model, ds[test, vars], type="class")
 pr.rp = predict(model, ds[test, vars], type="prob")[,2]
+train(Species ~., data=dat, method="rpart",trControl=tc,tuneGrid=rpart.grid)
 
 # Regression tree
 library(tree)
