@@ -4,7 +4,8 @@ require(dtw)
 require(RColorBrewer)
 
 # Data
-a = c(rep(0, 1000), 10*sin(seq(1, 10*pi, length.out=500)) + 2*rnorm(500), rep(0, 1500)) + rnorm(3000)
+a = c(rep(0, 1000), 10*sin(seq(1, 10*pi, length.out=500)) + 2*rnorm(500), rep(0, 1500)) +
+  arima.sim(n=3000, model=list(1,0,0))
 # Pattern
 b = 100*cos(seq(0, 2*pi, length.out=100))
 
@@ -44,8 +45,6 @@ for (ctr in n) {
   n2s[ctr] = n2
 }
 
-plot.ts(distances)
-
 distances=data.frame(dist=distances, n1=n1s, n2=n2s)
 
 distances.sub = subset(distances, dist>0)
@@ -53,7 +52,6 @@ distances.sorted = distances.sub[with(distances.sub, order(dist, decreasing=FALS
 
 distances.mean = mean(distances.sorted$dist)
 distances.min = subset(distances.sorted, dist < distances.mean)
-distances.min = head(distances.sorted, 10)
 
 matches = as.numeric(rownames(distances.min))
 a.max = max(a)
@@ -77,11 +75,11 @@ print(paste("Found ", length(matches.unique), " matches"))
 ctr = 1
 colors = rainbow(length(matches.unique))
 
+par(mfrow=c(2,1))
+
 # Plot the given signal
 plot.ts(a,
-  ylim=c(a.min, a.max +
-                max(max(distances[matches.unique,]$dist) -
-                distances[matches.unique,]$dist)))
+  ylim=c(a.min, a.max + 10))
 
 for (match in matches.unique) {
   d = distances[match,]
@@ -90,9 +88,10 @@ for (match in matches.unique) {
   lines(y=a[d$n1 : d$n2],
    x=d$n1 : d$n2, col=colors[ctr])
 
-  y = max(distances[matches.unique,]$dist) - d$dist + a.max
   # Indicate a bar depciting the range of match and heigh denoting distance
-  points(y=rep(y, d$n2-d$n1+1),
+  points(y=rep(a.max + 5, d$n2-d$n1+1),
     x=d$n1 : d$n2, col=colors[ctr], pch="-")
   ctr = ctr + 1
 }
+
+plot.ts(distances$dist)
