@@ -34,3 +34,8 @@ createFolds
 createResamples
 createMultiFolds
 
+# Periodogram from fft
+f = fft(t)
+require(TSA)
+periodogram(f, method="ar")
+
