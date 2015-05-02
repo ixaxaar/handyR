@@ -4,7 +4,7 @@ require(dtw)
 require(RColorBrewer)
 
 # Data
-a = c(rep(0, 1000), 100*sin(seq(1, 10*pi, length.out=500)) + 10*rnorm(500), rep(0, 1500)) + rnorm(3000)
+a = c(rep(0, 1000), 10*sin(seq(1, 10*pi, length.out=500)) + 2*rnorm(500), rep(0, 1500)) + rnorm(3000)
 # Pattern
 b = 100*cos(seq(0, 2*pi, length.out=100))
 
@@ -67,26 +67,31 @@ for (match in matches[matches.unique]) {
   d.int = sapply(matches, function(x) {
     d2 = distances[x,]
     n = length(intersect( seq(d$n2, d$n1), seq(d2$n2, d2$n1) ))
-    print(paste(n > overlap, d$dist, d2$dist, "     ", n))
     ifelse(n > (winsize+overlap)/2 && d$dist < d2$dist, FALSE, TRUE)
   })
-  print(d.int)
   matches.unique = matches.unique & d.int
 }
-print(sum(matches.unique))
 matches.unique = matches[matches.unique]
 print(paste("Found ", length(matches.unique), " matches"))
 
 ctr = 1
 colors = rainbow(length(matches.unique))
-plot.ts(a, ylim=c(a.min, a.max + max(distances[matches.unique,]$dist)))
+
+# Plot the given signal
+plot.ts(a,
+  ylim=c(a.min, a.max +
+                max(max(distances[matches.unique,]$dist) -
+                distances[matches.unique,]$dist)))
+
 for (match in matches.unique) {
   d = distances[match,]
 
+  # Highlight the matched parts of the signal
   lines(y=a[d$n1 : d$n2],
    x=d$n1 : d$n2, col=colors[ctr])
 
   y = max(distances[matches.unique,]$dist) - d$dist + a.max
+  # Indicate a bar depciting the range of match and heigh denoting distance
   points(y=rep(y, d$n2-d$n1+1),
     x=d$n1 : d$n2, col=colors[ctr], pch="-")
   ctr = ctr + 1
