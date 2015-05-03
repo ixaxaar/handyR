@@ -75,7 +75,7 @@ print(paste("Found ", length(matches.unique), " matches"))
 ctr = 1
 colors = rainbow(length(matches.unique))
 
-par(mfrow=c(2,1))
+par(mfrow=c(2,1), mai = c(0.5, 0.5, 0.5, 0.5))
 
 # Plot the given signal
 plot.ts(a,
@@ -88,7 +88,7 @@ for (match in matches.unique) {
   lines(y=a[d$n1 : d$n2],
    x=d$n1 : d$n2, col=colors[ctr])
 
-  # Indicate a bar depciting the range of match and heigh denoting distance
+  # Indicate a bar depciting the range of match
   points(y=rep(a.max + 5, d$n2-d$n1+1),
     x=d$n1 : d$n2, col=colors[ctr], pch="-")
   ctr = ctr + 1
