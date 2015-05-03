@@ -1,9 +1,9 @@
 
-require(HMM)
+require(depmixS4)
 require(TTR)
 
 sample.dat = dat[1:2000,]
-# sample.dat$value = EMA(sample.dat$value, n=5)
+sample.dat$value = EMA(sample.dat$value, n=5)
 
 states = c("Blower", "Drier", "Unknown")
 
